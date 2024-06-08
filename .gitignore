@@ -1,0 +1,6 @@
+PackageCache/
+Temp/
+Library/
+*.csproj
+*.sln
+/.vscode
