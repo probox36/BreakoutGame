@@ -69,13 +69,13 @@ public class BrickController : MonoBehaviour
             var brickParams = newBrick.GetComponent<Brick>();
             var brickSprite = newBrick.GetComponent<SpriteRenderer>();
 
-            brickParams.controller = this;
+            brickParams.brickController = this;
 
             if (Random.Range(0f, 10f) < 9.5) {
-                brickParams.type = Brick.BrickType.Regular;
+                brickParams.type = BrickType.Regular;
                 brickSprite.color = gradient.Evaluate((float)colNum / (size.y - 1));
             } else {
-                brickParams.type = Brick.BrickType.Hard;
+                brickParams.type = BrickType.Hard;
                 brickSprite.color = Color.yellow;
             }
 

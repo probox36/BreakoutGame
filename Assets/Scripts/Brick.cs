@@ -1,24 +1,18 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Brick : MonoBehaviour
 {
 
-    public enum BrickType { 
-        Regular, Bonus, 
-        Hard
-    }
-
     public BrickType type;
-    public BrickController controller;
+    public BrickController brickController;
+    public ScoreController scoreController;
     private int hitsLeft = 1;
     public bool breakable;
 
     void Start()
     {
         if (type.Equals(BrickType.Hard)) { hitsLeft = 3; }
+        scoreController = GameObject.Find("ScoreController").GetComponent<ScoreController>();
         breakable = true;
     }
 
@@ -31,14 +25,15 @@ public class Brick : MonoBehaviour
         if (ball.CompareTag("Ball") && breakable) {
             hitsLeft--;
             if (hitsLeft < 1) {
+                scoreController.brickDestroyed(this);
                 Destroy(gameObject);
             }
         }
     }
 
     void OnDestroy() {
-        if (controller != null) {
-            controller.notifyWhenBrickDestroyed();
+        if (brickController != null) {
+            brickController.notifyWhenBrickDestroyed();
         }
     }
 }
