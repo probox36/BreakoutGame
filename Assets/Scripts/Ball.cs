@@ -37,7 +37,10 @@ public class Ball : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Mouse0)) {
                 state = BallState.Released;
-                rigidBody.velocity = new Vector2(Random.Range(-1f, 1f), Random.Range(0f, 1f));
+                var yVelocity = Random.Range(0f, 1f);
+                var tg35 = 1.428148f;
+                var xVelocity = Random.Range(-yVelocity*tg35, yVelocity*tg35);
+                rigidBody.velocity = new Vector2(xVelocity, yVelocity);
                 setSpeed(speed);
             }
 
