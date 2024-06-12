@@ -84,14 +84,21 @@ public class BrickController : MonoBehaviour
 
     }
 
-    void Awake() {
+    public void Awake() {
 
         rows = new List<GameObject>();
+        clear();
         for (int rowNum = 1; rowNum <= size.y; rowNum++)  {
 
             GameObject newRow = new GameObject { name = "Row " + rowNum };
             rows.Add(newRow);
             placeRow(newRow, offset.y*(rowNum - size.y));
+        }
+    }
+
+    public void clear() {
+        foreach (GameObject row in rows) {
+            Destroy(row);
         }
     }
 

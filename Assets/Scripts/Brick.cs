@@ -32,7 +32,8 @@ public class Brick : MonoBehaviour
     }
 
     void OnDestroy() {
-        if (brickController != null) {
+        if (GameObject.Find("BrickController") != null) {
+            
             brickController.notifyWhenBrickDestroyed();
         }
     }
