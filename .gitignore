@@ -4,4 +4,4 @@ Library/
 *.csproj
 *.sln
 /.vscode
-.log
+*.log
