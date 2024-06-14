@@ -10,6 +10,7 @@ public class BrickController : MonoBehaviour
     public Vector2 offset;
     public GameObject brickPrefab;
     public Gradient gradient;
+    public BrickAnimator brickAnimator;
     private List<GameObject> rows;
 
     public void notifyWhenBrickDestroyed() {
@@ -70,18 +71,21 @@ public class BrickController : MonoBehaviour
             var brickSprite = newBrick.GetComponent<SpriteRenderer>();
 
             brickParams.brickController = this;
+            brickParams.brickAnimator = brickAnimator;
 
             if (Random.Range(0f, 10f) < 9.5) {
                 brickParams.type = BrickType.Regular;
                 brickSprite.color = gradient.Evaluate((float)colNum / (size.y - 1));
+                newBrick.transform.SetParent(row.transform);
             } else {
+                GameObject brickParent = new GameObject();
+                brickParent.transform.position = newBrick.transform.position;
+                brickParent.transform.SetParent(row.transform);
                 brickParams.type = BrickType.Hard;
                 brickSprite.color = Color.yellow;
+                newBrick.transform.SetParent(brickParent.transform);
             }
-
-            newBrick.transform.SetParent(row.transform);
         }
-
     }
 
     public void Awake() {

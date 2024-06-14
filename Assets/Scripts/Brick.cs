@@ -8,6 +8,7 @@ public class Brick : MonoBehaviour
     public ScoreController scoreController;
     private int hitsLeft = 1;
     public bool breakable;
+    public BrickAnimator brickAnimator;
 
     void Start()
     {
@@ -26,14 +27,17 @@ public class Brick : MonoBehaviour
             hitsLeft--;
             if (hitsLeft < 1) {
                 scoreController.brickDestroyed(this);
+                brickAnimator.animateBrokenBrick(gameObject);
                 Destroy(gameObject);
+            } else {
+                Animation animation = gameObject.GetComponent<Animation>();
+                animation.Play();
             }
         }
     }
 
     void OnDestroy() {
         if (GameObject.Find("BrickController") != null) {
-            
             brickController.notifyWhenBrickDestroyed();
         }
     }
