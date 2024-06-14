@@ -9,7 +9,9 @@ public class BrickController : MonoBehaviour
     public Vector2Int size;
     public Vector2 offset;
     public GameObject brickPrefab;
-    public Gradient gradient;
+    public Gradient blueGradient;
+    public Gradient greenGradient;
+    public Gradient yellowGradient;
     public BrickAnimator brickAnimator;
     private List<GameObject> rows;
 
@@ -73,16 +75,22 @@ public class BrickController : MonoBehaviour
             brickParams.brickController = this;
             brickParams.brickAnimator = brickAnimator;
 
-            if (Random.Range(0f, 10f) < 9.5) {
+            var random = Random.Range(0f, 10f);
+
+            if (random < 9) {
                 brickParams.type = BrickType.Regular;
-                brickSprite.color = gradient.Evaluate((float)colNum / (size.y - 1));
+                brickSprite.color = blueGradient.Evaluate((float)colNum / (size.y - 1));
+                newBrick.transform.SetParent(row.transform);
+            } else if (random > 9.1 && random < 9.5) {
+                brickParams.type = BrickType.Bonus;
+                brickSprite.color = greenGradient.Evaluate((float)colNum / (size.y - 1));
                 newBrick.transform.SetParent(row.transform);
             } else {
                 GameObject brickParent = new GameObject();
                 brickParent.transform.position = newBrick.transform.position;
                 brickParent.transform.SetParent(row.transform);
                 brickParams.type = BrickType.Hard;
-                brickSprite.color = Color.yellow;
+                brickSprite.color = yellowGradient.Evaluate((float)colNum / (size.y - 1));
                 newBrick.transform.SetParent(brickParent.transform);
             }
         }
@@ -91,7 +99,6 @@ public class BrickController : MonoBehaviour
     public void Awake() {
 
         rows = new List<GameObject>();
-        clear();
         for (int rowNum = 1; rowNum <= size.y; rowNum++)  {
 
             GameObject newRow = new GameObject { name = "Row " + rowNum };

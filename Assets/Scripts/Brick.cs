@@ -8,6 +8,7 @@ public class Brick : MonoBehaviour
     public ScoreController scoreController;
     private int hitsLeft = 1;
     public bool breakable;
+    public GameObject bonusPrefab;
     public BrickAnimator brickAnimator;
 
     void Start()
@@ -28,6 +29,13 @@ public class Brick : MonoBehaviour
             if (hitsLeft < 1) {
                 scoreController.brickDestroyed(this);
                 brickAnimator.animateBrokenBrick(gameObject);
+                if (type.Equals(BrickType.Bonus)) {
+                    GameObject bonus = Instantiate(bonusPrefab);
+                    bonus.transform.SetParent(null);
+                    bonus.transform.position = transform.position;
+                    var bonusRigidBody = bonus.GetComponent<Rigidbody2D>();
+                    bonusRigidBody.AddForceY(-300);
+                }
                 Destroy(gameObject);
             } else {
                 Animation animation = gameObject.GetComponent<Animation>();

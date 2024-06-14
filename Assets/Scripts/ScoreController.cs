@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -19,11 +20,23 @@ public class ScoreController : MonoBehaviour
     public PaddleController paddle;
     public BrickController brickController;
     private bool paused = true;
+    private List<BonusController> bonuses = new List<BonusController>();
+
+    public void addBonus(BonusController bonus) {
+        bonuses.Add(bonus);
+    }
+
+    public void removeBonus(BonusController bonus) {
+        bonuses.Remove(bonus);
+    }
 
     public void setPaused(bool paused) {
         this.paused = paused;
         paddle.setPaused(paused);
         ball.setPaused(paused);
+        foreach (BonusController bonus in bonuses) {
+            bonus.setPaused(paused);
+        }
         pauseText.text = paused ? "▐▐" : "";
     }
 
@@ -40,8 +53,7 @@ public class ScoreController : MonoBehaviour
         speed = ball.speed + speedChange;
         ball.setSpeed(speed);
         score += scoreToAdd;
-        scoreText.text = score.ToString();
-        speedText.text = Math.Round((decimal)speed, 1).ToString() + " mph";
+        refresh();
     }
 
     public void resetScene() {
@@ -49,9 +61,26 @@ public class ScoreController : MonoBehaviour
         ball.state = BallState.Attached;
         ball.Update();
         setPaused(true);
+        ball.setSpeed(baseSpeed);
         uiController.showGameOverDialog(score);
+        brickController.clear();
         brickController.Awake();
         Start();
+    }
+
+    public void caughtBonus() {
+        if (lives < 5) {
+            lives += 1;
+        } else {
+            score += 5;
+        }
+        refresh();
+    }
+
+    private void refresh() {
+        livesText.text = new string('■', lives);
+        scoreText.text = score.ToString();
+        speedText.text = Math.Round((decimal)speed, 1).ToString() + " mph";
     }
 
     public void ballLost() {
@@ -60,7 +89,7 @@ public class ScoreController : MonoBehaviour
         if (lives < 0) {
             resetScene();
         } else {
-            livesText.text = new string('■', lives);
+            refresh();
         }
     }
 
